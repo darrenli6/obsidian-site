@@ -5,7 +5,7 @@
 ## 它做什么
 
 1. **`builder.py`**：监听知识库变更 → 把笔记拷到 `docs/`（并把 `[[wikilink]]` 转成 Markdown 链接）→ 跑 `mkdocs build` → 原子切换到 `builds/site-*`，`site` 软链指向当前构建。
-2. **`serve.py`**：静态托管 `site/`，并提供文章 **点赞 API**（数据落在 `likes.json`）。
+2. **`serve.py`**：静态托管 `site/`，并提供文章 **点赞 / 浏览 API**（数据落在 `likes.json`）。
 3. **`cloudflared`**：命名隧道 `obsite`，把公网域名指到本机 `8090`。
 
 内容以 Obsidian 库为准；本仓库只存**站点工具与主题**，不存整库正文（构建产物也不进 Git）。
@@ -15,7 +15,7 @@
 | 路径 | 说明 |
 |------|------|
 | `builder.py` | 库 → docs → MkDocs 构建与热更新 |
-| `serve.py` | 静态服务 + `/api/likes`、`/api/like` |
+| `serve.py` | 静态服务 + `/api/likes`、`/api/like`、`/api/view` |
 | `start.sh` | 一键重启 builder / serve / tunnel |
 | `ensure.sh` | 任一进程挂了才重启（保活用） |
 | `mkdocs.yml` | MkDocs / Material 配置 |
@@ -82,19 +82,21 @@ bash /workspace/obsite/ensure.sh
 
 页脚文案在 `mkdocs.yml` 的 `copyright`（当前为 `Powered By Darren`）。
 
-## 点赞功能
+## 点赞与浏览
 
-- 文章页有 ❤️ 按钮；同浏览器（cookie `kb_vid`）对同一路径只能赞一次，再点取消。
-- 排行页：[点赞排行](https://darren.qqx.ai/点赞排行/)（笔记在 vault 的 `点赞排行.md`）。
+- 文章页显示 ❤️ 点赞数与 👁 浏览数；每次点击 ❤️ 都会 +1（可多次点赞，无取消）。
+- 打开文章页会记一次浏览（同路径约 30 分钟内软去重）。
+- 排行页：[点赞排行](https://darren.qqx.ai/点赞排行/)（按点赞降序，其次浏览；笔记在 vault 的 `点赞排行.md`）。
 - API（同源，无需额外配置）：
 
 ```text
 GET  /api/likes
 GET  /api/likes?path=/某路径/
-POST /api/like   body: {"path":"/某路径/","title":"标题"}
+POST /api/like   body: {"path":"/某路径/","title":"标题"}  # likes += 1
+POST /api/view   body: {"path":"/某路径/","title":"标题"}  # views += 1
 ```
 
-数据文件：`likes.json`。换机器部署时把该文件一并带上，赞数才不会丢。
+数据文件：`likes.json`（`{pages: {path: {title, likes, views}}}`）。换机器部署时把该文件一并带上，赞数/浏览才不会丢。cookie `kb_vid` 仅作可选访客标识，不限制点赞。
 
 ## 常用环境变量
 

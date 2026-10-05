@@ -1,5 +1,5 @@
-/* 点赞按钮 */
-.kb-like-bar { display: flex; align-items: center; gap: .8em; margin: -.4em 0 1.2em; }
+/* 点赞按钮 + 浏览数 */
+.kb-like-bar { display: flex; align-items: center; gap: .8em; margin: -.4em 0 1.2em; flex-wrap: wrap; }
 .kb-like-bar--bottom { justify-content: center; margin: 2.5em 0 .5em; padding-top: 1.2em; border-top: 1px dashed var(--md-default-fg-color--lightest); }
 .kb-like-bar__hint { color: var(--md-default-fg-color--light); font-size: .75rem; }
 .kb-like {
@@ -18,6 +18,15 @@
 .kb-like--pop svg { animation: kb-pop .4s ease; }
 @keyframes kb-pop { 0% { transform: scale(1); } 40% { transform: scale(1.45); } 100% { transform: scale(1); } }
 
+.kb-views {
+  display: inline-flex; align-items: center; gap: .35em;
+  padding: .3em .9em; border-radius: 999px; font-size: .75rem; line-height: 1.6;
+  color: var(--md-default-fg-color--light);
+  border: 1px solid transparent;
+}
+.kb-views svg, .kb-views .kb-view__icon { width: 1.1em; height: 1.1em; }
+.kb-views__count { font-weight: 700; min-width: 1ch; }
+
 /* 点赞排行 */
 .md-typeset ol.kb-rank { list-style: none; margin: 1em 0; padding: 0; }
 .md-typeset ol.kb-rank li.kb-rank__item {
@@ -30,6 +39,9 @@
 }
 .kb-rank__item--top .kb-rank__no { background: #e53935; color: #fff; }
 .kb-rank__title { flex: 1; min-width: 0; }
-.kb-rank__count { flex: none; display: inline-flex; align-items: center; gap: .3em; color: #e53935; font-weight: 700; }
+.kb-rank__stats { flex: none; display: inline-flex; align-items: center; gap: .9em; }
+.kb-rank__count { display: inline-flex; align-items: center; gap: .3em; color: #e53935; font-weight: 700; }
 .kb-rank__count svg { width: 1em; height: 1em; fill: currentColor; }
+.kb-rank__views { display: inline-flex; align-items: center; gap: .3em; color: var(--md-default-fg-color--light); font-weight: 600; }
+.kb-rank__views svg, .kb-rank__views .kb-view__icon { width: 1em; height: 1em; }
 .kb-rank__empty { color: var(--md-default-fg-color--light); }

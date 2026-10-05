@@ -1,10 +1,14 @@
 #!/usr/bin/env python3
-"""Static server for the MkDocs site + a tiny likes API (stdlib only).
-  GET  /api/likes              -> {"items": [{"path","title","count"}...]} sorted by count desc
-  GET  /api/likes?path=/p/     -> {"path","count","liked"}
-  POST /api/like {"path","title"} -> toggle like for this visitor (cookie kb_vid) -> {"path","count","liked"}
-Persistence: likes.json next to this file: {"pages": {"/path/": {"title": "...", "voters": ["uuid"]}}}"""
-import functools, http.server, json, os, posixpath, re, tempfile, threading, uuid
+"""Static server for the MkDocs site + likes/views API (stdlib only).
+  GET  /api/likes              -> {"items": [{"path","title","likes","views"}...]} sorted by likes desc, then views desc
+  GET  /api/likes?path=/p/     -> {"path","likes","views"}
+  POST /api/like {"path","title"} -> increment likes by 1 -> {"path","likes","views"}
+  POST /api/view {"path","title"} -> increment views by 1 -> {"path","likes","views"}
+Persistence: likes.json next to this file:
+  {"pages": {"/path/": {"title": "...", "likes": N, "views": M}}}
+Migrates legacy shape {"voters": [...]} -> likes=len(voters), drops voters, adds views:0.
+Cookie kb_vid is optional analytics only; does NOT gate likes."""
+import functools, http.server, json, os, re, tempfile, threading, uuid
 from http.cookies import SimpleCookie
 from urllib.parse import urlsplit, parse_qs, unquote
 
@@ -19,11 +23,42 @@ MAX_BODY = 4096
 LOCK = threading.Lock()
 UUID_RE = re.compile(r"^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$")
 
+def _page_counts(pg):
+    """Return (likes, views) from a page dict, migrating voters if present."""
+    if not isinstance(pg, dict):
+        return 0, 0
+    likes = pg.get("likes")
+    if likes is None:
+        voters = pg.get("voters")
+        likes = len(voters) if isinstance(voters, list) else 0
+    try:
+        likes = max(0, int(likes))
+    except (TypeError, ValueError):
+        likes = 0
+    views = pg.get("views", 0)
+    try:
+        views = max(0, int(views))
+    except (TypeError, ValueError):
+        views = 0
+    return likes, views
+
+def migrate_pages(pages):
+    """Normalize all pages to {title, likes, views}; drop voters."""
+    out = {}
+    for path, pg in (pages or {}).items():
+        if not isinstance(pg, dict):
+            continue
+        likes, views = _page_counts(pg)
+        title = pg.get("title") if isinstance(pg.get("title"), str) else ""
+        out[path] = {"title": title, "likes": likes, "views": views}
+    return out
+
 def load():
     try:
         with open(LIKES, encoding="utf-8") as f:
             d = json.load(f)
         if isinstance(d, dict) and isinstance(d.get("pages"), dict):
+            d["pages"] = migrate_pages(d["pages"])
             return d
     except FileNotFoundError:
         pass
@@ -44,6 +79,11 @@ def save(d):
         raise
 
 DATA = load()
+# Persist migration on startup if voters were present
+try:
+    save(DATA)
+except Exception as e:
+    print("likes migrate save skipped:", repr(e), flush=True)
 
 def norm_path(p):
     """Validate + normalize a page path. Returns '/a/b/' or None."""
@@ -66,6 +106,23 @@ def clean_title(t, fallback):
     t = re.sub(r"\s+", " ", t).strip()[:MAX_TITLE]
     return t or fallback
 
+def ensure_page(pages, path, title_hint=None):
+    pg = pages.get(path)
+    if not pg:
+        pg = {"title": "", "likes": 0, "views": 0}
+        pages[path] = pg
+    likes, views = _page_counts(pg)
+    pg["likes"] = likes
+    pg["views"] = views
+    if "voters" in pg:
+        del pg["voters"]
+    fallback = path.strip("/").split("/")[-1] or path
+    if title_hint is not None:
+        pg["title"] = clean_title(title_hint, pg.get("title") or fallback)
+    elif not pg.get("title"):
+        pg["title"] = fallback
+    return pg
+
 class H(http.server.SimpleHTTPRequestHandler):
     def end_headers(self):
         p = self.path.split("?")[0]
@@ -75,9 +132,8 @@ class H(http.server.SimpleHTTPRequestHandler):
 
     def log_message(self, *a): pass
 
-    # --- helpers ---
     def visitor(self):
-        """Return (vid, is_new)."""
+        """Return (vid, is_new). Cookie is optional analytics only."""
         c = SimpleCookie()
         try: c.load(self.headers.get("Cookie", ""))
         except Exception: pass
@@ -96,7 +152,22 @@ class H(http.server.SimpleHTTPRequestHandler):
         self.end_headers()
         if self.command != "HEAD": self.wfile.write(body)
 
-    # --- routes ---
+    def read_json_body(self, vid, new):
+        try:
+            n = int(self.headers.get("Content-Length", "0"))
+        except ValueError:
+            n = -1
+        if n <= 0 or n > MAX_BODY:
+            self.send_json(400, {"error": "bad body"}, vid, new)
+            return None
+        try:
+            req = json.loads(self.rfile.read(n).decode("utf-8"))
+            assert isinstance(req, dict)
+            return req
+        except Exception:
+            self.send_json(400, {"error": "bad json"}, vid, new)
+            return None
+
     def do_GET(self):
         u = urlsplit(self.path)
         if u.path == "/api/likes": return self.api_get(u)
@@ -109,39 +180,28 @@ class H(http.server.SimpleHTTPRequestHandler):
 
     def do_POST(self):
         u = urlsplit(self.path)
-        if u.path != "/api/like": return self.send_json(404, {"error": "not found"})
+        if u.path == "/api/like": return self.api_inc("likes")
+        if u.path == "/api/view": return self.api_inc("views")
+        return self.send_json(404, {"error": "not found"})
+
+    def api_inc(self, field):
+        """Increment likes or views by 1."""
         vid, new = self.visitor()
-        try:
-            n = int(self.headers.get("Content-Length", "0"))
-        except ValueError:
-            n = -1
-        if n <= 0 or n > MAX_BODY: return self.send_json(400, {"error": "bad body"}, vid, new)
-        try:
-            req = json.loads(self.rfile.read(n).decode("utf-8"))
-            assert isinstance(req, dict)
-        except Exception:
-            return self.send_json(400, {"error": "bad json"}, vid, new)
+        req = self.read_json_body(vid, new)
+        if req is None: return
         path = norm_path(req.get("path"))
         if not path: return self.send_json(400, {"error": "bad path"}, vid, new)
         with LOCK:
             pages = DATA["pages"]
-            pg = pages.get(path) or {"title": "", "voters": []}
-            voters = pg.get("voters") or []
-            if vid in voters:
-                voters.remove(vid); liked = False
-            else:
-                voters.append(vid); liked = True
-            pg["voters"] = voters
-            pg["title"] = clean_title(req.get("title"), pg.get("title") or path.strip("/").split("/")[-1])
-            if voters: pages[path] = pg
-            else: pages.pop(path, None)
+            pg = ensure_page(pages, path, req.get("title"))
+            pg[field] = int(pg.get(field, 0)) + 1
             try:
                 save(DATA)
             except Exception as e:
                 print("save failed:", repr(e), flush=True)
                 return self.send_json(500, {"error": "save failed"}, vid, new)
-            count = len(voters)
-        return self.send_json(200, {"path": path, "count": count, "liked": liked}, vid, new)
+            res = {"path": path, "likes": pg["likes"], "views": pg["views"]}
+        return self.send_json(200, res, vid, new)
 
     def api_get(self, u):
         vid, new = self.visitor()
@@ -150,14 +210,22 @@ class H(http.server.SimpleHTTPRequestHandler):
             path = norm_path(q["path"][0])
             if not path: return self.send_json(400, {"error": "bad path"}, vid, new)
             with LOCK:
-                voters = (DATA["pages"].get(path) or {}).get("voters") or []
-                res = {"path": path, "count": len(voters), "liked": vid in voters}
-            return self.send_json(200, res, vid, new)
+                pg = DATA["pages"].get(path) or {}
+                likes, views = _page_counts(pg)
+            return self.send_json(200, {"path": path, "likes": likes, "views": views}, vid, new)
         with LOCK:
-            items = [{"path": p, "title": v.get("title") or p, "count": len(v.get("voters") or [])}
-                     for p, v in DATA["pages"].items()]
-        items = [i for i in items if i["count"] > 0]
-        items.sort(key=lambda i: (-i["count"], i["title"]))
+            items = []
+            for p, v in DATA["pages"].items():
+                likes, views = _page_counts(v)
+                if likes <= 0 and views <= 0:
+                    continue
+                items.append({
+                    "path": p,
+                    "title": (v.get("title") if isinstance(v, dict) else None) or p,
+                    "likes": likes,
+                    "views": views,
+                })
+        items.sort(key=lambda i: (-i["likes"], -i["views"], i["title"]))
         return self.send_json(200, {"items": items}, vid, new)
 
 http.server.ThreadingHTTPServer.allow_reuse_address = True

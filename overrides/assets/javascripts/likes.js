@@ -1,9 +1,11 @@
-/* 点赞功能：文章页点赞按钮 + 点赞排行榜（数据来自同域 /api/likes） */
+/* 点赞 + 浏览数：文章页按钮 + 排行榜（数据来自同域 /api/likes、/api/like、/api/view） */
 (function () {
   "use strict";
   var SITE_SUFFIX_RE = /\s*[-–—|]\s*Darren 的知识库\s*$/;
   var RANK_PATH = "/点赞排行/";
+  var VIEW_DEDUPE_MS = 30 * 60 * 1000; // soft-dedupe same path within ~30 min
   var HEART = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>';
+  var EYE = '<svg class="kb-view__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5c-7 0-10 7-10 7s3 7 10 7 10-7 10-7-3-7-10-7zm0 11a4 4 0 1 1 0-8 4 4 0 0 1 0 8z" fill="currentColor"/><circle cx="12" cy="12" r="2.2" fill="var(--md-default-bg-color, #fff)"/></svg>';
 
   function normPath(p) {
     p = p || location.pathname;
@@ -34,65 +36,120 @@
     });
   }
 
-  /* ---------- 文章页点赞按钮 ---------- */
-  function makeButton() {
+  function viewKey(path) { return "kb_view:" + path; }
+  function shouldCountView(path) {
+    try {
+      var raw = localStorage.getItem(viewKey(path));
+      if (!raw) return true;
+      var t = parseInt(raw, 10);
+      if (!t || (Date.now() - t) >= VIEW_DEDUPE_MS) return true;
+      return false;
+    } catch (e) {
+      return true;
+    }
+  }
+  function markViewCounted(path) {
+    try { localStorage.setItem(viewKey(path), String(Date.now())); } catch (e) {}
+  }
+
+  /* ---------- 文章页：点赞 + 浏览 ---------- */
+  function makeLikeButton() {
     var b = document.createElement("button");
     b.type = "button";
     b.className = "kb-like";
+    b.title = "点赞";
+    b.setAttribute("aria-label", "点赞");
     b.innerHTML = HEART + '<span class="kb-like__label">点赞</span><span class="kb-like__count">0</span>';
     return b;
+  }
+  function makeViewsEl() {
+    var s = document.createElement("span");
+    s.className = "kb-views";
+    s.title = "浏览数";
+    s.setAttribute("aria-label", "浏览数");
+    s.innerHTML = EYE + '<span class="kb-views__label">浏览</span><span class="kb-views__count">0</span>';
+    return s;
   }
   function setupLikes(path) {
     var article = document.querySelector(".md-content__inner");
     if (!article) return;
-    var buttons = [];
-    var top = makeButton();
-    top.classList.add("kb-like--top");
+    var likeButtons = [];
+    var viewEls = [];
+
+    var topBar = document.createElement("div");
+    topBar.className = "kb-like-bar";
+    var topLike = makeLikeButton();
+    topLike.classList.add("kb-like--top");
+    var topViews = makeViewsEl();
+    topBar.appendChild(topLike);
+    topBar.appendChild(topViews);
     var h1 = article.querySelector("h1");
-    var wrap = document.createElement("div");
-    wrap.className = "kb-like-bar";
-    wrap.appendChild(top);
-    if (h1 && h1.parentNode) h1.parentNode.insertBefore(wrap, h1.nextSibling);
-    else article.insertBefore(wrap, article.firstChild);
-    buttons.push(top);
+    if (h1 && h1.parentNode) h1.parentNode.insertBefore(topBar, h1.nextSibling);
+    else article.insertBefore(topBar, article.firstChild);
+    likeButtons.push(topLike);
+    viewEls.push(topViews);
 
     var bottomWrap = document.createElement("div");
     bottomWrap.className = "kb-like-bar kb-like-bar--bottom";
-    var bottom = makeButton();
     bottomWrap.innerHTML = '<span class="kb-like-bar__hint">觉得有用就点个赞吧 👇</span>';
-    bottomWrap.appendChild(bottom);
+    var bottomLike = makeLikeButton();
+    var bottomViews = makeViewsEl();
+    bottomWrap.appendChild(bottomLike);
+    bottomWrap.appendChild(bottomViews);
     article.appendChild(bottomWrap);
-    buttons.push(bottom);
+    likeButtons.push(bottomLike);
+    viewEls.push(bottomViews);
 
-    var state = { count: 0, liked: false, busy: false };
+    var state = { likes: 0, views: 0, busy: false };
     function render() {
-      buttons.forEach(function (b) {
-        b.classList.toggle("is-liked", state.liked);
-        b.setAttribute("aria-pressed", state.liked ? "true" : "false");
-        b.title = state.liked ? "取消点赞" : "点赞";
-        b.querySelector(".kb-like__label").textContent = state.liked ? "已赞" : "点赞";
-        b.querySelector(".kb-like__count").textContent = state.count;
+      likeButtons.forEach(function (b) {
+        b.classList.toggle("is-liked", state.likes > 0);
+        b.querySelector(".kb-like__count").textContent = state.likes;
+      });
+      viewEls.forEach(function (el) {
+        el.querySelector(".kb-views__count").textContent = state.views;
       });
     }
     render();
-    api("GET", "/api/likes?path=" + encodeURIComponent(path)).then(function (d) {
-      state.count = d.count; state.liked = d.liked; render();
-    }).catch(function () {});
-    function toggle() {
+
+    function applyCounts(d) {
+      if (!d) return;
+      if (typeof d.likes === "number") state.likes = d.likes;
+      if (typeof d.views === "number") state.views = d.views;
+      render();
+    }
+
+    // Load current counts
+    api("GET", "/api/likes?path=" + encodeURIComponent(path)).then(applyCounts).catch(function () {});
+
+    // Record a view (soft-dedupe ~30 min via localStorage)
+    if (shouldCountView(path)) {
+      api("POST", "/api/view", { path: path, title: pageTitle() }).then(function (d) {
+        markViewCounted(path);
+        applyCounts(d);
+      }).catch(function () {});
+    }
+
+    function onLike() {
       if (state.busy) return;
       state.busy = true;
-      // 乐观更新
-      var prev = { count: state.count, liked: state.liked };
-      state.liked = !state.liked; state.count += state.liked ? 1 : -1; render();
-      buttons.forEach(function (b) { b.classList.remove("kb-like--pop"); void b.offsetWidth; if (state.liked) b.classList.add("kb-like--pop"); });
+      var prev = state.likes;
+      state.likes = prev + 1;
+      render();
+      likeButtons.forEach(function (b) {
+        b.classList.remove("kb-like--pop");
+        void b.offsetWidth;
+        b.classList.add("kb-like--pop");
+      });
       api("POST", "/api/like", { path: path, title: pageTitle() }).then(function (d) {
-        state.count = d.count; state.liked = d.liked; render();
+        applyCounts(d);
       }).catch(function () {
-        state.count = prev.count; state.liked = prev.liked; render();
+        state.likes = prev;
+        render();
         alert("点赞失败，请稍后再试");
       }).then(function () { state.busy = false; });
     }
-    buttons.forEach(function (b) { b.addEventListener("click", toggle); });
+    likeButtons.forEach(function (b) { b.addEventListener("click", onLike); });
   }
 
   /* ---------- 点赞排行榜 ---------- */
@@ -100,14 +157,22 @@
     el.innerHTML = '<p class="kb-rank__empty">加载中…</p>';
     api("GET", "/api/likes").then(function (d) {
       var items = (d && d.items) || [];
-      if (!items.length) { el.innerHTML = '<p class="kb-rank__empty">还没有人点赞，去文章页点第一个赞吧 ❤️</p>'; return; }
+      if (!items.length) {
+        el.innerHTML = '<p class="kb-rank__empty">还没有点赞或浏览记录，去文章页点第一个赞吧 ❤️</p>';
+        return;
+      }
       var html = '<ol class="kb-rank">';
       items.forEach(function (it, i) {
         var href = encodeURI(it.path);
+        var likes = typeof it.likes === "number" ? it.likes : (it.count || 0);
+        var views = typeof it.views === "number" ? it.views : 0;
         html += '<li class="kb-rank__item' + (i < 3 ? " kb-rank__item--top" : "") + '">' +
           '<span class="kb-rank__no">' + (i + 1) + '</span>' +
           '<a class="kb-rank__title" href="' + esc(href) + '">' + esc(it.title || it.path) + '</a>' +
-          '<span class="kb-rank__count">' + HEART + esc(it.count) + '</span></li>';
+          '<span class="kb-rank__stats">' +
+            '<span class="kb-rank__count" title="点赞">' + HEART + esc(likes) + '</span>' +
+            '<span class="kb-rank__views" title="浏览">' + EYE + esc(views) + '</span>' +
+          '</span></li>';
       });
       el.innerHTML = html + "</ol>";
     }).catch(function () {
