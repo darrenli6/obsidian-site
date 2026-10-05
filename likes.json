@@ -7,8 +7,8 @@
   },
   "/30-内容创作/公众号-AbMaxx月入5万美元/文章正文/": {
    "title": "18 岁、不会写代码，5 个月把一款\"练腹肌\"App 做到月入 5 万美元",
-   "likes": 7,
-   "views": 0
+   "likes": 9,
+   "views": 1
   },
   "/30-内容创作/公众号-ClaudeOpus做App官网宣传片/文章正文/": {
    "title": "几个提示词做出 iOS App、官网和发布视频：用 Claude Opus 5.5 复刻一款\"月入 200 万美元\"的发票 App",
@@ -24,6 +24,31 @@
    "title": "月入 10 万美元的 App 都在用的获客打法：用 Claude Code + AI，0.83 美元克隆一条爆款\"静音 UGC\"",
    "likes": 9,
    "views": 0
+  },
+  "/30-内容创作/公众号-Supabase打造可收费API/文章正文/": {
+   "title": "把一张数据表做成可收费的公开 API：像千万公司一样设计密钥、门卫与限流（Supabase 全流程）",
+   "likes": 2,
+   "views": 1
+  },
+  "/30-内容创作/公众号-AIRollup一人控股公司/文章正文/": {
+   "title": "5 万亿美元交接潮：Greg Isenberg 拆解一人控股公司做 AI Roll-up 的完整打法",
+   "likes": 0,
+   "views": 1
+  },
+  "/30-内容创作/公众号-MariaWendt低价产品月入百万/文章正文/": {
+   "title": "从第一年只赚 63 美元到累计 2200 万美元：Maria Wendt 靠\"一条 Reel + 一个关键词 + 一个结账页\"做到月入百万",
+   "likes": 0,
+   "views": 1
+  },
+  "/30-内容创作/公众号-Tabi日语AI口语教练/文章正文/": {
+   "title": "语音才是下一站：用 Gemini 3.8 Live，6 步做出能真正开口练的日语 AI 教练 Tabi",
+   "likes": 0,
+   "views": 1
+  },
+  "/30-内容创作/公众号-GrokBot20美元九种用法/文章正文/": {
+   "title": "Grok Bot 只要 20 美元了：Paul Lipsky 拆解一支会管邮件、盯 X、订奶昔、改官网的 Bot 团队",
+   "likes": 0,
+   "views": 1
   }
  }
 }
