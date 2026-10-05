@@ -126,7 +126,9 @@ def ensure_page(pages, path, title_hint=None):
 class H(http.server.SimpleHTTPRequestHandler):
     def end_headers(self):
         p = self.path.split("?")[0]
-        if p.endswith("/") or p.endswith(".html") or p.endswith(".json") or p.startswith("/api/"):
+        if (p.endswith("/") or p.endswith(".html") or p.endswith(".json") or p.startswith("/api/")
+                or p.endswith("likes.js") or p.endswith("likes.css")
+                or "likes.js?" in p or "likes.css?" in p):
             self.send_header("Cache-Control", "no-cache")
         super().end_headers()
 
@@ -200,7 +202,7 @@ class H(http.server.SimpleHTTPRequestHandler):
             except Exception as e:
                 print("save failed:", repr(e), flush=True)
                 return self.send_json(500, {"error": "save failed"}, vid, new)
-            res = {"path": path, "likes": pg["likes"], "views": pg["views"]}
+            res = {"path": path, "likes": pg["likes"], "count": pg["likes"], "views": pg["views"]}
         return self.send_json(200, res, vid, new)
 
     def api_get(self, u):
@@ -212,7 +214,7 @@ class H(http.server.SimpleHTTPRequestHandler):
             with LOCK:
                 pg = DATA["pages"].get(path) or {}
                 likes, views = _page_counts(pg)
-            return self.send_json(200, {"path": path, "likes": likes, "views": views}, vid, new)
+            return self.send_json(200, {"path": path, "likes": likes, "count": likes, "views": views}, vid, new)
         with LOCK:
             items = []
             for p, v in DATA["pages"].items():
@@ -223,6 +225,7 @@ class H(http.server.SimpleHTTPRequestHandler):
                     "path": p,
                     "title": (v.get("title") if isinstance(v, dict) else None) or p,
                     "likes": likes,
+                    "count": likes,
                     "views": views,
                 })
         items.sort(key=lambda i: (-i["likes"], -i["views"], i["title"]))

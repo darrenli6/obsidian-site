@@ -43,9 +43,9 @@ markdown_extensions:
   - pymdownx.tilde
 extra_css:
   - extra.css
-  - assets/stylesheets/likes.css
+  - assets/stylesheets/likes.css?v=3
 extra_javascript:
-  - assets/javascripts/likes.js
+  - assets/javascripts/likes.js?v=3
 
 copyright: Powered By Darren
 extra:

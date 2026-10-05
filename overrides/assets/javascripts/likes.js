@@ -3,9 +3,9 @@
   "use strict";
   var SITE_SUFFIX_RE = /\s*[-–—|]\s*Darren 的知识库\s*$/;
   var RANK_PATH = "/点赞排行/";
-  var VIEW_DEDUPE_MS = 30 * 60 * 1000; // soft-dedupe same path within ~30 min
+  var VIEW_DEDUPE_MS = 30 * 60 * 1000;
   var HEART = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>';
-  var EYE = '<svg class="kb-view__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5c-7 0-10 7-10 7s3 7 10 7 10-7 10-7-3-7-10-7zm0 11a4 4 0 1 1 0-8 4 4 0 0 1 0 8z" fill="currentColor"/><circle cx="12" cy="12" r="2.2" fill="var(--md-default-bg-color, #fff)"/></svg>';
+  var EYE = '<svg class="kb-view__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5c-7 0-10 7-10 7s3 7 10 7 10-7 10-7-3-7-10-7zm0 11a4 4 0 1 1 0-8 4 4 0 0 1 0 8z" fill="currentColor"/><circle cx="12" cy="12" r="2.2" fill="#ffffff"/></svg>';
 
   function normPath(p) {
     p = p || location.pathname;
@@ -20,7 +20,7 @@
       var h1 = document.querySelector(".md-content h1");
       t = h1 ? h1.textContent.replace(/¶/g, "").trim() : t;
     }
-    return t.slice(0, 200);
+    return (t || "").slice(0, 200);
   }
   function api(method, url, body) {
     var opt = { method: method, credentials: "same-origin", headers: {} };
@@ -31,9 +31,24 @@
     });
   }
   function esc(s) {
-    return String(s).replace(/[&<>"']/g, function (c) {
+    return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
       return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
     });
+  }
+  function num(v, fallback) {
+    var n = Number(v);
+    return isFinite(n) && n >= 0 ? n : (fallback || 0);
+  }
+  /** Accept likes or legacy count from API */
+  function pickLikes(d) {
+    if (!d || typeof d !== "object") return 0;
+    if (d.likes != null) return num(d.likes, 0);
+    if (d.count != null) return num(d.count, 0);
+    return 0;
+  }
+  function pickViews(d) {
+    if (!d || typeof d !== "object") return 0;
+    return num(d.views, 0);
   }
 
   function viewKey(path) { return "kb_view:" + path; }
@@ -52,7 +67,6 @@
     try { localStorage.setItem(viewKey(path), String(Date.now())); } catch (e) {}
   }
 
-  /* ---------- 文章页：点赞 + 浏览 ---------- */
   function makeLikeButton() {
     var b = document.createElement("button");
     b.type = "button";
@@ -102,27 +116,31 @@
 
     var state = { likes: 0, views: 0, busy: false };
     function render() {
+      var likes = num(state.likes, 0);
+      var views = num(state.views, 0);
+      state.likes = likes;
+      state.views = views;
       likeButtons.forEach(function (b) {
-        b.classList.toggle("is-liked", state.likes > 0);
-        b.querySelector(".kb-like__count").textContent = state.likes;
+        b.classList.toggle("is-liked", likes > 0);
+        var c = b.querySelector(".kb-like__count");
+        if (c) c.textContent = String(likes);
       });
       viewEls.forEach(function (el) {
-        el.querySelector(".kb-views__count").textContent = state.views;
+        var c = el.querySelector(".kb-views__count");
+        if (c) c.textContent = String(views);
       });
     }
     render();
 
     function applyCounts(d) {
-      if (!d) return;
-      if (typeof d.likes === "number") state.likes = d.likes;
-      if (typeof d.views === "number") state.views = d.views;
+      if (!d || d.error) return;
+      state.likes = pickLikes(d);
+      state.views = pickViews(d);
       render();
     }
 
-    // Load current counts
     api("GET", "/api/likes?path=" + encodeURIComponent(path)).then(applyCounts).catch(function () {});
 
-    // Record a view (soft-dedupe ~30 min via localStorage)
     if (shouldCountView(path)) {
       api("POST", "/api/view", { path: path, title: pageTitle() }).then(function (d) {
         markViewCounted(path);
@@ -152,7 +170,6 @@
     likeButtons.forEach(function (b) { b.addEventListener("click", onLike); });
   }
 
-  /* ---------- 点赞排行榜 ---------- */
   function setupRanking(el) {
     el.innerHTML = '<p class="kb-rank__empty">加载中…</p>';
     api("GET", "/api/likes").then(function (d) {
@@ -163,15 +180,17 @@
       }
       var html = '<ol class="kb-rank">';
       items.forEach(function (it, i) {
+        if (!it || !it.path) return;
         var href = encodeURI(it.path);
-        var likes = typeof it.likes === "number" ? it.likes : (it.count || 0);
-        var views = typeof it.views === "number" ? it.views : 0;
+        var likes = pickLikes(it);
+        var views = pickViews(it);
+        var title = it.title || it.path || "未命名";
         html += '<li class="kb-rank__item' + (i < 3 ? " kb-rank__item--top" : "") + '">' +
           '<span class="kb-rank__no">' + (i + 1) + '</span>' +
-          '<a class="kb-rank__title" href="' + esc(href) + '">' + esc(it.title || it.path) + '</a>' +
+          '<a class="kb-rank__title" href="' + esc(href) + '">' + esc(title) + '</a>' +
           '<span class="kb-rank__stats">' +
-            '<span class="kb-rank__count" title="点赞">' + HEART + esc(likes) + '</span>' +
-            '<span class="kb-rank__views" title="浏览">' + EYE + esc(views) + '</span>' +
+            '<span class="kb-rank__count" title="点赞">' + HEART + esc(String(likes)) + '</span>' +
+            '<span class="kb-rank__views" title="浏览">' + EYE + esc(String(views)) + '</span>' +
           '</span></li>';
       });
       el.innerHTML = html + "</ol>";
@@ -184,7 +203,7 @@
     var path = normPath();
     var rank = document.getElementById("likes-ranking");
     if (rank) setupRanking(rank);
-    if (document.querySelector(".kb-like")) return; // 已初始化
+    if (document.querySelector(".kb-like")) return;
     var isHome = path === "/";
     var isRank = path === RANK_PATH || !!rank;
     var is404 = !document.querySelector(".md-content__inner") || /^404/.test(document.title);
@@ -192,7 +211,7 @@
   }
 
   if (window.document$ && typeof window.document$.subscribe === "function") {
-    window.document$.subscribe(function () { init(); }); // Material instant navigation
+    window.document$.subscribe(function () { init(); });
   } else if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", init);
   } else {
