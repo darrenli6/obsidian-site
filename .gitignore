@@ -1,0 +1,28 @@
+# Python
+venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.Python
+
+# MkDocs build / generated
+builds/
+site
+site/
+docs/
+build_tmp/
+
+# Runtime logs & PIDs
+logs/
+*.pid
+*.log
+
+# Transient / local
+unresolved.json
+.DS_Store
+*.swp
+*~
+
+# Optional local env
+.env
+.env.*

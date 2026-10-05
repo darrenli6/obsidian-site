@@ -1,0 +1,35 @@
+/* 点赞按钮 */
+.kb-like-bar { display: flex; align-items: center; gap: .8em; margin: -.4em 0 1.2em; }
+.kb-like-bar--bottom { justify-content: center; margin: 2.5em 0 .5em; padding-top: 1.2em; border-top: 1px dashed var(--md-default-fg-color--lightest); }
+.kb-like-bar__hint { color: var(--md-default-fg-color--light); font-size: .75rem; }
+.kb-like {
+  display: inline-flex; align-items: center; gap: .35em; cursor: pointer;
+  padding: .3em .9em; border-radius: 999px; font-size: .75rem; line-height: 1.6;
+  color: var(--md-default-fg-color--light); background: transparent;
+  border: 1px solid var(--md-default-fg-color--lighter);
+  transition: color .2s, border-color .2s, background-color .2s, transform .1s;
+}
+.kb-like svg { width: 1.1em; height: 1.1em; fill: none; stroke: currentColor; stroke-width: 2; transition: fill .2s; }
+.kb-like:hover { color: #e53935; border-color: #e53935; }
+.kb-like:active { transform: scale(.95); }
+.kb-like.is-liked { color: #e53935; border-color: #e53935; background: rgba(229, 57, 53, .08); }
+.kb-like.is-liked svg { fill: currentColor; }
+.kb-like__count { font-weight: 700; min-width: 1ch; }
+.kb-like--pop svg { animation: kb-pop .4s ease; }
+@keyframes kb-pop { 0% { transform: scale(1); } 40% { transform: scale(1.45); } 100% { transform: scale(1); } }
+
+/* 点赞排行 */
+.md-typeset ol.kb-rank { list-style: none; margin: 1em 0; padding: 0; }
+.md-typeset ol.kb-rank li.kb-rank__item {
+  display: flex; align-items: center; gap: .8em; margin: 0; padding: .6em .4em;
+  border-bottom: 1px solid var(--md-default-fg-color--lightest);
+}
+.kb-rank__no {
+  flex: none; width: 1.8em; height: 1.8em; border-radius: 50%; text-align: center; line-height: 1.8em;
+  font-size: .7rem; font-weight: 700; background: var(--md-default-fg-color--lightest); color: var(--md-default-fg-color--light);
+}
+.kb-rank__item--top .kb-rank__no { background: #e53935; color: #fff; }
+.kb-rank__title { flex: 1; min-width: 0; }
+.kb-rank__count { flex: none; display: inline-flex; align-items: center; gap: .3em; color: #e53935; font-weight: 700; }
+.kb-rank__count svg { width: 1em; height: 1em; fill: currentColor; }
+.kb-rank__empty { color: var(--md-default-fg-color--light); }

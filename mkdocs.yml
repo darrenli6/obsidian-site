@@ -1,0 +1,52 @@
+site_name: Darren 的知识库
+docs_dir: docs
+site_dir: build_tmp
+use_directory_urls: true
+theme:
+  name: material
+  custom_dir: overrides
+  language: zh
+  features:
+    - navigation.indexes
+    - navigation.top
+    - navigation.tracking
+    - navigation.sections
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+    - toc.follow
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      toggle: {icon: material/brightness-7, name: 切换到深色模式}
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      toggle: {icon: material/brightness-4, name: 切换到浅色模式}
+plugins:
+  - search:
+      lang: [zh, en]
+      separator: '[\s\u200b\-]'
+markdown_extensions:
+  - toc: {permalink: true}
+  - tables
+  - attr_list
+  - md_in_html
+  - footnotes
+  - admonition
+  - nl2br
+  - pymdownx.superfences
+  - pymdownx.tasklist: {custom_checkbox: true}
+  - pymdownx.highlight
+  - pymdownx.mark
+  - pymdownx.tilde
+extra_css:
+  - extra.css
+  - assets/stylesheets/likes.css
+extra_javascript:
+  - assets/javascripts/likes.js
+
+copyright: Powered By Darren
+extra:
+  generator: false
