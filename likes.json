@@ -64,6 +64,71 @@
    "title": "人生是一场心智游戏：Dan Koe 谈为什么你总是\"三分钟热度\"，以及怎么赢",
    "likes": 3,
    "views": 3
+  },
+  "/30-内容创作/公众号-GrokBot一人公司两小时实战/文章正文/": {
+   "title": "用 Grok Bot 搭一支一人公司：从 AI COO、邮箱助手到广告投放的两小时实战",
+   "likes": 1,
+   "views": 4
+  },
+  "/30-内容创作/公众号-Flame情侣App-VSC框架/文章正文/": {
+   "title": "做 App 之前，先去 TikTok「算一卦」：情侣应用 Flame 靠 VSC 框架 8 个月把 MRR 从 3000 做到 1 万美元",
+   "likes": 0,
+   "views": 1
+  },
+  "/30-内容创作/公众号-小预算Meta广告扩量/文章正文/": {
+   "title": "一天只有 30 美元，别再学大号「堆素材」：后 Andromeda 时代小预算 Meta 广告的扩量打法",
+   "likes": 0,
+   "views": 1
+  },
+  "/30-内容创作/公众号-零代码1小时克隆百万SaaS/文章正文/": {
+   "title": "不写一行代码，1 小时克隆一个「百万美元级」SaaS：Lovable + Supabase + Firecrawl 实战全流程",
+   "likes": 0,
+   "views": 1
+  },
+  "/30-内容创作/公众号-AI时代13种生意/文章正文/": {
+   "title": "智能体时代还剩哪些生意可做？Greg Isenberg 列出 13 种「值得拥有」的业务",
+   "likes": 0,
+   "views": 1
+  },
+  "/30-内容创作/公众号-MicroSaaS赚钱全攻略/文章正文/": {
+   "title": "一个人也能月入 4 万美元：Greg Isenberg 拆解微型 SaaS 全攻略（增长飞轮 + 5 个可直接抄的点子）",
+   "likes": 0,
+   "views": 1
+  },
+  "/30-内容创作/公众号-UGC达人计划与窄众赛道/文章正文/": {
+   "title": "别挤大赛道：SideShift 联创 Canyon 拆解 UGC 达人计划——团队怎么搭、窄众怎么扩、自然爆款怎么变广告",
+   "likes": 0,
+   "views": 1
+  },
+  "/30-内容创作/公众号-复刻Finch动画App/文章正文/": {
+   "title": "用一句句大白话，复刻月入百万美元的 Finch：Claude Fable 5.1 + Higgsfield 做一款会动的宠物习惯 App",
+   "likes": 0,
+   "views": 1
+  },
+  "/30-内容创作/公众号-5个GitHub开源仓库/文章正文/": {
+   "title": "GitHub 是智能体时代的「未来预告片」：Greg Isenberg 精选 5 个能省时间、能赚钱的开源仓库",
+   "likes": 0,
+   "views": 2
+  },
+  "/30-内容创作/公众号-RasMic软件工厂四步法/文章正文/": {
+   "title": "「软件工厂」到底是什么？Ras Mic 用几份 Markdown 文件，让十几个 AI 智能体并行写出靠得住的代码",
+   "likes": 0,
+   "views": 1
+  },
+  "/30-内容创作/公众号-AI数字人频道月入近10万/文章正文/": {
+   "title": "一个月从 5000 美元做到近 10 万：AI 数字人 YouTube 频道学员 Samuel 的复盘",
+   "likes": 0,
+   "views": 1
+  },
+  "/30-内容创作/公众号-10小时做出并卖出AI-SaaS/文章正文/": {
+   "title": "10 小时从零做出一款 AI SaaS 并让陌生人付费：16 岁创业者 Ty Chen 的 Polymind 实验全记录",
+   "likes": 0,
+   "views": 2
+  },
+  "/30-内容创作/公众号-TRACE模型练英语听力/文章正文/": {
+   "title": "单词都认识，为什么还是听不懂？从 TRACE 模型看英语听力的底层逻辑：先把「声音模板」练准",
+   "likes": 0,
+   "views": 1
   }
  }
 }
