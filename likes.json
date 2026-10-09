@@ -13,7 +13,7 @@
   "/30-内容创作/公众号-ClaudeOpus做App官网宣传片/文章正文/": {
    "title": "几个提示词做出 iOS App、官网和发布视频：用 Claude Opus 5.5 复刻一款\"月入 200 万美元\"的发票 App",
    "likes": 1,
-   "views": 2
+   "views": 3
   },
   "/点赞排行/": {
    "title": "点赞排行",
@@ -177,6 +177,66 @@
   },
   "/30-内容创作/公众号-光遗传学获2026诺贝尔医学奖/文章正文/": {
    "title": "用光开关大脑：2026 年诺贝尔生理学或医学奖，奖的是光遗传学",
+   "likes": 0,
+   "views": 1
+  },
+  "/30-内容创作/公众号-15个偷懒句型说快英语/文章正文/": {
+   "title": "英语突然流利的人，都在重复这 15 个句型：学会「偷懒」，开口才快",
+   "likes": 0,
+   "views": 1
+  },
+  "/30-内容创作/公众号-Supabase用pgvector做生产级RAG/文章正文/": {
+   "title": "从 pgvector 到生产级 RAG：用 Supabase 两小时搭一个“和自己的文件聊天”的应用",
+   "likes": 0,
+   "views": 1
+  },
+  "/30-内容创作/公众号-8个GitHub项目搞钱/文章正文/": {
+   "title": "8 个 GitHub 项目和 AI 技能：从发布视频到客户调研，每个都能变成一门小生意",
+   "likes": 1,
+   "views": 1
+  },
+  "/30-内容创作/公众号-多模态RAG聊天PDF图与表/文章正文/": {
+   "title": "不只聊文字：用 Unstructured + LangChain 做多模态 RAG，让模型读懂 PDF 里的图和表",
+   "likes": 0,
+   "views": 1
+  },
+  "/30-内容创作/公众号-屠龙博士创业秘密/文章正文/": {
+   "title": "屠龙博士创业秘密：一手信息、先销售再产品、不看竞对",
+   "likes": 0,
+   "views": 1
+  },
+  "/30-内容创作/公众号-50微站点Google排名蓝图/文章正文/": {
+   "title": "建了 50 个微站点冲上 Google：本地 SEO 微站点蓝图（EMD + AI 接电话）",
+   "likes": 0,
+   "views": 1
+  },
+  "/30-内容创作/公众号-三工具一小时开无脸频道/文章正文/": {
+   "title": "人在车里、只用三个 AI 工具：一小时开一个无脸 YouTube 频道（磁钓赛道实战）",
+   "likes": 0,
+   "views": 1
+  },
+  "/30-内容创作/公众号-ClaudeCode自行车教学法赚钱/文章正文/": {
+   "title": "非程序员也能用 Claude Code：Nate Herk 的「自行车教学法」与据称月入 25 万美元的自动化实操",
+   "likes": 0,
+   "views": 1
+  },
+  "/30-内容创作/公众号-ClaudeCode做AI旅行App/文章正文/": {
+   "title": "用 Claude Code 做出能在手机上跑的 AI 旅行 App：Codesistency 的结构化工作流全课",
+   "likes": 0,
+   "views": 1
+  },
+  "/30-内容创作/公众号-DanKoe妄想目标才能成功/文章正文/": {
+   "title": "想成功，你得先「妄想」一点：Dan Koe 谈妄想目标如何改写注意力与现实",
+   "likes": 0,
+   "views": 2
+  },
+  "/30-内容创作/公众号-Claude做AI扫餐热量App/文章正文/": {
+   "title": "用 Claude 结构化工作流做出能上架的 AI 扫餐热量 App：Codesistency 全课",
+   "likes": 0,
+   "views": 1
+  },
+  "/30-内容创作/公众号-ClaudeCode三App训练营/文章正文/": {
+   "title": "12 小时用 Claude Code 做出三款真机 App：旅行规划、热量追踪与牙医诊所",
    "likes": 0,
    "views": 1
   }
