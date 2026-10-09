@@ -26,3 +26,7 @@ unresolved.json
 # Optional local env
 .env
 .env.*
+!.env.example
+
+# Hidden article slugs (do not publish)
+hidden.json

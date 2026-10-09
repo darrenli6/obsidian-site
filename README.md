@@ -5,7 +5,7 @@
 ## 它做什么
 
 1. **`builder.py`**：监听知识库变更 → 把笔记拷到 `docs/`（并把 `[[wikilink]]` 转成 Markdown 链接）→ 跑 `mkdocs build` → 原子切换到 `builds/site-*`，`site` 软链指向当前构建。
-2. **`serve.py`**：静态托管 `site/`，并提供文章 **点赞 / 浏览 API**（数据落在 `likes.json`）。
+2. **`serve.py`**：静态托管 `site/`，登录后才可阅读；并提供文章 **点赞 / 浏览 API**（数据落在 `likes.json`）。
 3. **`cloudflared`**：命名隧道 `obsite`，把公网域名指到本机 `8090`。
 
 内容以 Obsidian 库为准；本仓库只存**站点工具与主题**，不存整库正文（构建产物也不进 Git）。
@@ -60,8 +60,8 @@ bash /workspace/obsite/start.sh
 本地自检：
 
 ```bash
-curl -sI http://127.0.0.1:8090/ | head -5
-curl -sA Mozilla https://darren.qqx.ai/ | head -5
+curl -sI http://127.0.0.1:8090/login | head -5
+curl -sI http://127.0.0.1:8090/ | head -5   # 未登录应跳到 /login
 ```
 
 只在「有进程挂了」时才重启（适合定时保活）：
@@ -98,6 +98,13 @@ POST /api/view   body: {"path":"/某路径/","title":"标题"}  # views += 1
 
 数据文件：`likes.json`（`{pages: {path: {title, likes, views}}}`）。换机器部署时把该文件一并带上，赞数/浏览才不会丢。cookie `kb_vid` 仅作可选访客标识，不限制点赞。
 
+## 登录
+
+整站（页面、读者会用到的静态资源、以及 `/api/likes`、`/api/like`、`/api/view`）需要登录。账号在 `obsite/.env` 的 `AUTH_USERNAME` / `AUTH_PASSWORD`（不要写进源码或 Git）。正确登录后写入 HttpOnly cookie `kb_session`，并回到原来要看的页面。
+
+登录页：<https://darren.qqx.ai/login>
+
+
 ## 常用环境变量
 
 | 变量 | 默认 | 含义 |
@@ -107,6 +114,9 @@ POST /api/view   body: {"path":"/某路径/","title":"标题"}  # views += 1
 | `INTERVAL` | `15` | builder 轮询间隔（秒） |
 | `LIKES_FILE` | 本目录 `likes.json` | 点赞持久化路径 |
 | `CLOUDFLARED` | `~/.local/bin/cloudflared` | cloudflared 可执行文件 |
+| `AUTH_USERNAME` | （`.env`） | 登录用户名 |
+| `AUTH_PASSWORD` | （`.env`） | 登录密码 |
+| `AUTH_SECRET` | （`.env`） | 会话 cookie 签名密钥 |
 
 ## Git
 
