@@ -223,7 +223,7 @@
   "/30-内容创作/公众号-ClaudeCode做AI旅行App/文章正文/": {
    "title": "用 Claude Code 做出能在手机上跑的 AI 旅行 App：Codesistency 的结构化工作流全课",
    "likes": 0,
-   "views": 1
+   "views": 2
   },
   "/30-内容创作/公众号-DanKoe妄想目标才能成功/文章正文/": {
    "title": "想成功，你得先「妄想」一点：Dan Koe 谈妄想目标如何改写注意力与现实",
@@ -233,10 +233,35 @@
   "/30-内容创作/公众号-Claude做AI扫餐热量App/文章正文/": {
    "title": "用 Claude 结构化工作流做出能上架的 AI 扫餐热量 App：Codesistency 全课",
    "likes": 0,
-   "views": 1
+   "views": 3
   },
   "/30-内容创作/公众号-ClaudeCode三App训练营/文章正文/": {
    "title": "12 小时用 Claude Code 做出三款真机 App：旅行规划、热量追踪与牙医诊所",
+   "likes": 0,
+   "views": 2
+  },
+  "/30-内容创作/公众号-软件像牛奶一样便宜/文章正文/": {
+   "title": "当软件像牛奶一样便宜，我们还要交付什么",
+   "likes": 0,
+   "views": 1
+  },
+  "/30-内容创作/公众号-Claude与Jev三策略AI交易机器人/文章正文/": {
+   "title": "Claude Code + Jev：三个策略做成 24/7 纸上交易机器人",
+   "likes": 0,
+   "views": 1
+  },
+  "/30-内容创作/公众号-扎克伯格Muse个人智能体/文章正文/": {
+   "title": "扎克伯格谈 Muse：给每人一台 24 小时干活的个人 AI，据称还会帮你赚钱",
+   "likes": 0,
+   "views": 1
+  },
+  "/30-内容创作/公众号-ReactNative全栈房产AppKribb/文章正文/": {
+   "title": "React Native 全栈房产 App 完整课：Expo + Clerk + Supabase 做出可上架的 Kribb",
+   "likes": 0,
+   "views": 3
+  },
+  "/30-内容创作/公众号-对话孙宇晨AI时代机会/文章正文/": {
+   "title": "对话孙宇晨：年轻人如何抓住 AI 时代的机会",
    "likes": 0,
    "views": 1
   }
