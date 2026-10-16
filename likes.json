@@ -279,6 +279,56 @@
    "title": "OpenAI 联合创始人 Greg Brockman：别等准备好，现在就开始用 AI 构建",
    "likes": 0,
    "views": 1
+  },
+  "/30-内容创作/公众号-REA逆向工程一切实测/文章正文/": {
+   "title": "实测爆火的「逆向工程一切」REA：AI 不缺执行力，缺的是一个清晰的参照物",
+   "likes": 0,
+   "views": 1
+  },
+  "/30-内容创作/公众号-用ClaudeCode搭建AI社媒代理团队/文章正文/": {
+   "title": "用 Claude Code + Next.js 搭一支\"AI 社媒运营团队\"：从一句指令到自动排期发帖",
+   "likes": 0,
+   "views": 1
+  },
+  "/30-内容创作/公众号-React与Three.js打造3D作品集/文章正文/": {
+   "title": "3.5 小时做出一个\"能拿奖\"的 3D 开发者作品集：React + Three.js + GSAP 全流程拆解",
+   "likes": 0,
+   "views": 1
+  },
+  "/30-内容创作/公众号-性阴影与欲望/文章正文/": {
+   "title": "为什么你会想和\"那个人\"上床？——性阴影如何左右欲望",
+   "likes": 0,
+   "views": 1
+  },
+  "/30-内容创作/公众号-NextJS全栈复刻GrokBot智能体平台/文章正文/": {
+   "title": "6小时用 Next.js 从零复刻 Grok Bot：会排程、能连上千工具、还自带云桌面的 AI 智能体平台",
+   "likes": 0,
+   "views": 1
+  },
+  "/30-内容创作/公众号-用Claude打造一人AI公司/文章正文/": {
+   "title": "用 Claude Code 打造一人 AI 公司：从获客、成交到交付的 4 小时完整路线图",
+   "likes": 0,
+   "views": 1
+  },
+  "/30-内容创作/公众号-4小时全栈GenAI文档助手/文章正文/": {
+   "title": "4 小时从零搭一个全栈 GenAI 文档助手：FastAPI + React + Supabase + RAG 实战全记录",
+   "likes": 0,
+   "views": 1
+  },
+  "/30-内容创作/公众号-ReactNative全栈记账App/文章正文/": {
+   "title": "从零用 React Native + Expo 做一个全栈记账 App：后端、鉴权、限流到部署",
+   "likes": 0,
+   "views": 1
+  },
+  "/30-内容创作/公众号-Hermes当24小时剪辑师/摘要/": {
+   "title": "摘要：让 Hermes Agent 当你的 24 小时视频剪辑师",
+   "likes": 0,
+   "views": 1
+  },
+  "/30-内容创作/公众号-M5Ultra对比双DGXSpark/文章正文/": {
+   "title": "M5 Ultra 对决两台 DGX Spark：跑本地大模型，你真正该看的那个数字",
+   "likes": 0,
+   "views": 1
   }
  }
 }
