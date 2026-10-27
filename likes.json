@@ -462,8 +462,8 @@
   },
   "/30-内容创作/公众号-曼昆经济学原理五大思维/文章正文/": {
    "title": "读懂曼昆《经济学原理》：5个思维工具，治好你的选择困难症",
-   "likes": 0,
-   "views": 1
+   "likes": 1,
+   "views": 2
   },
   "/30-内容创作/公众号-智能体AI入门全课/文章正文/": {
    "title": "6.5小时智能体AI入门全课精读：从Agent原理到LangChain、LangGraph与AutoGPT",
@@ -482,6 +482,36 @@
   },
   "/30-内容创作/公众号-Agent五大要素与知识库实战/文章正文/": {
    "title": "Agent智能体入门：五大核心要素与个人知识库实战",
+   "likes": 0,
+   "views": 1
+  },
+  "/30-内容创作/公众号-闲置Mac变身本地AI同事/文章正文/": {
+   "title": "闲置的Mac，成了我AI团队里最好用的新同事",
+   "likes": 0,
+   "views": 1
+  },
+  "/30-内容创作/公众号-本地跑Qwen3.6实测/文章正文/": {
+   "title": "在 MacBook 和 iPhone 17 Pro 上本地跑 Qwen 3.6：差距正在缩小",
+   "likes": 0,
+   "views": 2
+  },
+  "/30-内容创作/公众号-Claude十分钟做YouTube缩略图/文章正文/": {
+   "title": "用 Claude Code 十分钟做出专业级 YouTube 缩略图：研究、简报、变体、脸库四步法",
+   "likes": 2,
+   "views": 1
+  },
+  "/30-内容创作/公众号-五台MacStudio拼出家用AI超算/文章正文/": {
+   "title": "五台 Mac Studio 拼出一台家用 AI 超算：用 Exo 在桌面跑万亿参数大模型",
+   "likes": 0,
+   "views": 1
+  },
+  "/30-内容创作/公众号-ClaudeCode打造AI开发团队DevCrew/文章正文/": {
+   "title": "用 Claude Code 从零打造 AI 开发团队：四人智能体 + Kanban + 虚拟办公室",
+   "likes": 0,
+   "views": 1
+  },
+  "/30-内容创作/公众号-斯坦福教授的幸运科学/文章正文/": {
+   "title": "斯坦福教授的“幸运科学”：好运不是天赐，而是一套可以练习的方法",
    "likes": 0,
    "views": 1
   }
