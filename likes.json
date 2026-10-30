@@ -488,12 +488,12 @@
   "/30-内容创作/公众号-闲置Mac变身本地AI同事/文章正文/": {
    "title": "闲置的Mac，成了我AI团队里最好用的新同事",
    "likes": 0,
-   "views": 1
+   "views": 2
   },
   "/30-内容创作/公众号-本地跑Qwen3.6实测/文章正文/": {
    "title": "在 MacBook 和 iPhone 17 Pro 上本地跑 Qwen 3.6：差距正在缩小",
    "likes": 0,
-   "views": 2
+   "views": 3
   },
   "/30-内容创作/公众号-Claude十分钟做YouTube缩略图/文章正文/": {
    "title": "用 Claude Code 十分钟做出专业级 YouTube 缩略图：研究、简报、变体、脸库四步法",
@@ -503,7 +503,7 @@
   "/30-内容创作/公众号-五台MacStudio拼出家用AI超算/文章正文/": {
    "title": "五台 Mac Studio 拼出一台家用 AI 超算：用 Exo 在桌面跑万亿参数大模型",
    "likes": 0,
-   "views": 1
+   "views": 2
   },
   "/30-内容创作/公众号-ClaudeCode打造AI开发团队DevCrew/文章正文/": {
    "title": "用 Claude Code 从零打造 AI 开发团队：四人智能体 + Kanban + 虚拟办公室",
@@ -544,6 +544,41 @@
    "title": "一个\"最无聊\"的网站，月入 3 万美元：Excel Exercises 的极简生意经",
    "likes": 0,
    "views": 1
+  },
+  "/10-调研报告/Reddit SaaS 用户吐槽摘要（2026-10-30）/": {
+   "title": "Reddit SaaS 用户吐槽摘要（2026 10 30）",
+   "likes": 0,
+   "views": 1
+  },
+  "/30-内容创作/公众号-用ClaudeCode造AI视频剪辑器/文章正文/": {
+   "title": "让 Claude Code 替你剪视频：从零造一个 AI 视频剪辑器",
+   "likes": 0,
+   "views": 1
+  },
+  "/30-内容创作/公众号-ClaudeCode新手观念地图/文章正文/": {
+   "title": "40 分钟讲透 Claude Code：新手必须搞懂的 25 个核心概念",
+   "likes": 0,
+   "views": 1
+  },
+  "/30-内容创作/公众号-80岁学会20种语言/文章正文/": {
+   "title": "80 岁会 20 种语言、60 岁才从零学俄语：Steve Kaufmann 的 5 个学语言方法，和你想的完全相反",
+   "likes": 0,
+   "views": 1
+  },
+  "/30-内容创作/公众号-Harness实践Agent全自动做讲解视频/文章正文/": {
+   "title": "Harness 实践：让 Agent 全自动制作知识讲解视频",
+   "likes": 0,
+   "views": 1
+  },
+  "/30-内容创作/公众号-用REA逆向安卓APK/文章正文/": {
+   "title": "用 REA 和 Claude Code 逆向安卓 APK：一套\"证据优先\"的八步工作流",
+   "likes": 0,
+   "views": 1
+  },
+  "/30-内容创作/公众号-ChatGPTChrome扩展接管浏览器杂事/文章正文/": {
+   "title": "ChatGPT Chrome 扩展到底有多强：帮你接手浏览器里的杂事",
+   "likes": 0,
+   "views": 2
   }
  }
 }
