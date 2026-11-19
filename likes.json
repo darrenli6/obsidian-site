@@ -643,7 +643,7 @@
   "/30-内容创作/公众号-DGX-Spark上用ComfyUI生图生视频/文章正文/": {
    "title": "在 DGX Spark 上用 ComfyUI 生图生视频：把云账单换成电费",
    "likes": 0,
-   "views": 2
+   "views": 3
   },
   "/30-内容创作/公众号-一句话让仪表盘自己生成组件/文章正文/": {
    "title": "对 AI 说一句话，仪表盘自己把组件长出来",
@@ -652,6 +652,36 @@
   },
   "/30-内容创作/公众号-罗伯特格林成功不是运气是权力游戏/文章正文/": {
    "title": "罗伯特·格林：成功不是运气，是你看懂了权力游戏",
+   "likes": 0,
+   "views": 2
+  },
+  "/30-内容创作/公众号-开源AI助理QwenPaw的六大模块实操/文章正文/": {
+   "title": "开源 AI 助理 QwenPaw 的六大模块实操",
+   "likes": 0,
+   "views": 1
+  },
+  "/30-内容创作/公众号-用NVIDIA-Spark从开箱搭24小时AI员工/文章正文/": {
+   "title": "用 NVIDIA Spark 从开箱搭一台 24 小时 AI 员工",
+   "likes": 0,
+   "views": 1
+  },
+  "/30-内容创作/公众号-三台DGX-Spark组集群开箱到组网/文章正文/": {
+   "title": "三台 DGX Spark 组集群：开箱到组网，卡在 3GB/s",
+   "likes": 0,
+   "views": 1
+  },
+  "/30-内容创作/公众号-用ClaudeCode从零搭会自己生成组件的仪表盘/文章正文/": {
+   "title": "用 Claude Code 从零搭出会自己生成组件的仪表盘",
+   "likes": 0,
+   "views": 1
+  },
+  "/30-内容创作/公众号-DGX-Spark上跑ComfyUI与Qwen-Image/文章正文/": {
+   "title": "在 DGX Spark 上第一次装 ComfyUI：本地 53 tok/s，再用 Qwen-Image 画出一只猫",
+   "likes": 0,
+   "views": 1
+  },
+  "/30-内容创作/公众号-Agent要取代软件工程吗Cursor谈GrokBot/文章正文/": {
+   "title": "Agent 要取代软件工程吗？Cursor 谈 GrokBot 与 Grok 4.6",
    "likes": 0,
    "views": 1
   }
